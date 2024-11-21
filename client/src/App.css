@@ -1,0 +1,66 @@
+/* General styling */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+}
+
+.chat-container {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.messages-container {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #f9f9f9;
+}
+
+/* Message bubbles */
+.message {
+  max-width: 70%;
+  padding: 10px 15px;
+  border-radius: 20px;
+  word-wrap: break-word;
+  font-size: 14px;
+}
+
+/* Left-aligned messages */
+.message.left {
+  align-self: flex-start;
+  background-color: #e0e0e0;
+  color: #333;
+  border-bottom-left-radius: 5px;
+}
+
+/* Right-aligned messages */
+.message.right {
+  align-self: flex-end;
+  background-color: #007bff;
+  color: white;
+  border-bottom-right-radius: 5px;
+}
+
+/* Input container */
+.input-container {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background: #fff;
+  border-top: 1
+}
