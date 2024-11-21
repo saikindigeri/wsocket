@@ -125,31 +125,62 @@ app.post('/login', (req, res) => {
 
 // Save Messages Endpoint
 io.on('connection', (socket) => {
-  console.log('A user connected');
-
-  socket.on('chat message', ({ token, text }) => {
-    try {
-      const decoded = jwt.verify(token, SECRET_KEY);
-      const userId = decoded.id;
-
-      // Save message to database
-      db.query(
-        'INSERT INTO messages (user_id, message) VALUES (?, ?)',
-        [userId, text],
-        (err) => {
-          if (err) console.error(err);
-          io.emit('chat message', { userId, text });
-        }
-      );
-    } catch (err) {
-      console.error('Invalid token');
-    }
+    console.log('A user connected');
+  
+    socket.on('chat message', ({ token, text }) => {
+      try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const userId = decoded.id;
+  
+        // Fetch username from the database using userId
+        db.query('SELECT username FROM users WHERE id = ?', [userId], (err, results) => {
+          if (err) {
+            console.error(err);
+            return;
+          }
+          if (results.length === 0) {
+            console.error('User not found');
+            return;
+          }
+  
+          const username = results[0].username;
+  
+          // Save message to database along with the timestamp
+          const timestamp = new Date().toISOString(); // Get current timestamp
+          db.query(
+            'INSERT INTO messages (user_id, username, message, created_at) VALUES (?, ?, ?, ?)',
+            [userId, username, text, timestamp],
+            (err) => {
+              if (err) {
+                console.error(err);
+                return;
+              }
+              // Emit the message to all clients
+              io.emit('chat message', { userId, username, text, timestamp });
+            }
+          );
+        });
+      } catch (err) {
+        console.error('Invalid token');
+      }
+    });
+  
+    socket.on('disconnect', () => {
+      console.log('A user disconnected');
+    });
   });
+  
 
-  socket.on('disconnect', () => {
-    console.log('A user disconnected');
+// Fetch all messages
+app.get('/messages', (req, res) => {
+    db.query('SELECT * FROM messages ORDER BY created_at ASC', (err, results) => {
+      if (err) {
+        return res.status(500).json({ message: 'Error fetching messages' });
+      }
+      res.json(results);
+    });
   });
-});
+  
 
 // Start Server
 server.listen(4000, () => {
