@@ -119,7 +119,7 @@ function ChatPage({ selectedFriend }) {
     return () => {
       socket.off('chat message');
     };
-  }, [selectedFriend, userId, token]);
+  }, [selectedFriend, userId, token,messages]);
 
   // Handle sending messages
   const handleSendMessage = () => {
@@ -141,7 +141,7 @@ function ChatPage({ selectedFriend }) {
       setMessage(''); // Clear input field
     }
   };
-
+console.log(messages,userId)
   return (
     <div className="chat-container">
       <h2>Chat with {selectedFriend.username}</h2>
@@ -150,14 +150,14 @@ function ChatPage({ selectedFriend }) {
           <div
             key={index}
             className={
-              msg.sender_id === userId ? 'my-message' : 'other-message'
+              msg.sender_id == userId ? 'my-message' : 'other-message'
             }
           >
             <strong>
-              {msg.sender_id === userId ? 'You' : selectedFriend.username}
+              {msg.sender_id == userId ? 'You' : selectedFriend.username}
             </strong>
             : {msg.text} 
-            <small>{moment(msg.timestamp).format('h:mm:ss a')}</small>
+            <small>{moment(msg.timestamp).format('h:mm')}</small>
           </div>
         ))}
       </div>

@@ -15,8 +15,8 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/" element={<ChatPage />} />
-          <Route path="/friend-requests" element={<FriendRequests />} />
+        
+          <Route path="/" element={<FriendRequests />} />
           <Route path="/friends" element={<FriendSystem/>} />
         </Routes>
       </div>
