@@ -6,6 +6,7 @@ import LoginPage from './components/Login/LoginPage';
 import RegisterPage from './components/Register/RegisterPage';
 import ChatPage from './components/Chat/ChatPage';
 import FriendRequests from './components/FriendRequests';
+import FriendSystem from './components/FriendSystem';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/" element={<ChatPage />} />
           <Route path="/friend-requests" element={<FriendRequests />} />
+          <Route path="/friends" element={<FriendSystem/>} />
         </Routes>
       </div>
     </Router>

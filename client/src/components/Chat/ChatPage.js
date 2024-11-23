@@ -1,3 +1,4 @@
+/*
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
@@ -60,6 +61,115 @@ function ChatPage() {
         placeholder="Type a message..."
       />
       <button onClick={handleSendMessage}>Send</button>
+    </div>
+  );
+}
+
+export default ChatPage;
+*/
+import React, { useState, useEffect } from 'react';
+import io from 'socket.io-client';
+import axios from 'axios';
+import moment from 'moment';
+import './ChatPage.css';
+
+const socket = io('http://localhost:4000');
+
+function ChatPage({ selectedFriend }) {
+  const [message, setMessage] = useState('');
+  const [messages, setMessages] = useState([]);
+  const token = localStorage.getItem('token'); // Authentication token
+  const userId = localStorage.getItem('userId'); // Logged-in user's ID
+  const username = localStorage.getItem('username'); // Logged-in user's username
+
+  useEffect(() => {
+    // Join user's room on component load
+
+
+    // Fetch chat history when selectedFriend changes
+    const fetchMessages = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:4000/messages/${selectedFriend.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setMessages(response.data); // Populate chat history
+      } catch (err) {
+        console.error('Error fetching messages:', err);
+      }
+    };
+
+    fetchMessages();
+
+    // Listen for incoming messages
+    socket.on('chat message', (msg) => {
+      if (
+        (msg.senderId === userId && msg.receiverId === selectedFriend.id) ||
+        (msg.senderId === selectedFriend.id && msg.receiverId === userId)
+      ) {
+        setMessages((prev) => [...prev, msg]); // Append new messages to the state
+      }
+    });
+
+    // Cleanup socket listener on component unmount
+    return () => {
+      socket.off('chat message');
+    };
+  }, [selectedFriend, userId, token]);
+
+  // Handle sending messages
+  const handleSendMessage = () => {
+    if (message.trim()) {
+      const msg = {
+        senderId: userId,
+        receiverId: selectedFriend.id,
+        text: message,
+      };
+
+      // Emit message through socket
+      socket.emit('chat message', msg);
+
+      // Update local state for immediate feedback
+      setMessages((prev) => [
+        ...prev,
+        { ...msg, timestamp: new Date().toISOString() },
+      ]);
+      setMessage(''); // Clear input field
+    }
+  };
+
+  return (
+    <div className="chat-container">
+      <h2>Chat with {selectedFriend.username}</h2>
+      <div className="messages">
+        {messages.map((msg, index) => (
+          <div
+            key={index}
+            className={
+              msg.sender_id === userId ? 'my-message' : 'other-message'
+            }
+          >
+            <strong>
+              {msg.sender_id === userId ? 'You' : selectedFriend.username}
+            </strong>
+            : {msg.text} 
+            <small>{moment(msg.timestamp).format('h:mm:ss a')}</small>
+          </div>
+        ))}
+      </div>
+      <div className="input-container">
+        <input
+          type="text"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Type a message..."
+        />
+        <button onClick={handleSendMessage}>Send</button>
+      </div>
     </div>
   );
 }

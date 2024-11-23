@@ -298,6 +298,7 @@ app.get('/friends/:userId', (req, res) => {
 });
 
 // Real-time messaging
+/*
 io.on('connection', (socket) => {
   socket.on('chat message', ({ senderId, receiverId, text }) => {
     const timestamp = new Date().toISOString();
@@ -312,6 +313,75 @@ io.on('connection', (socket) => {
   });
 });
 
+*/
+
+
+
+io.on('connection', (socket) => {
+  
+
+  // Join user-specific room on connection
+
+  // Listen for chat messages
+  socket.on('chat message', ({ senderId, receiverId, text }) => {
+    const timestamp = new Date().toISOString();
+
+    // Insert the message into the database
+    db.query(
+      'INSERT INTO messages (sender_id, receiver_id, text, created_at) VALUES (?, ?, ?, ?)',
+      [senderId, receiverId, text, timestamp],
+      (err) => {
+        if (err) {
+          console.error('Error storing message:', err);
+          return;
+        }
+
+        // Emit the message only to the sender and receiver
+        io.to(senderId).to(receiverId).emit('chat message', {
+          senderId,
+          receiverId,
+          text,
+          timestamp,
+        });
+      }
+    );
+  });
+
+  // Handle user disconnection
+  socket.on('disconnect', () => {
+    console.log(`User disconnected: ${socket.id}`);
+  });
+});
+
+
+// Fetch messages between the logged-in user and selected friend
+app.get('/messages/:friendId', (req, res) => {
+
+  const { friendId } = req.params;
+  const token = req.headers.authorization.split(" ")[1]; // Get token from request headers
+  const decoded = jwt.verify(token, SECRET_KEY);
+  const userId = decoded.id;
+  if (!friendId) {
+    return res.status(400).json({ error: 'Friend ID is required' });
+  }
+
+  // Query to fetch messages between the logged-in user and the friend
+  db.query(
+    `SELECT * FROM messages 
+    WHERE (sender_id = ? AND receiver_id = ?) 
+       OR (sender_id = ? AND receiver_id = ?)
+    ORDER BY created_at ASC`,
+    [userId, friendId, friendId, userId],
+    (err, results) => {
+      if (err) {
+        return res.status(500).json({ error: 'Error fetching messages' });
+      }
+      res.json(results); // Return the messages in the response
+    }
+  );
+});
+
+ 
 // Start server
 server.listen(4000, () => {
   console.log('Server running on http://localhost:4000');
