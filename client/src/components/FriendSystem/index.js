@@ -116,9 +116,9 @@ const FriendSystem = () => {
 };
 
 export default FriendSystem;
-
-
 */
+
+
 import React, { useState, useEffect } from 'react';
 import ChatPage from '../Chat/ChatPage';
 import axios  from 'axios';
@@ -254,3 +254,5 @@ const FriendSystem = () => {
 };
 
 export default FriendSystem;
+
+

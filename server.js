@@ -243,6 +243,8 @@ app.post('/send-request', (req, res) => {
   );
 });
 
+
+
 // Accept friend request
 app.post('/accept-request', (req, res) => {
   const { requestId } = req.body;
