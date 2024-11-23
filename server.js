@@ -297,23 +297,7 @@ app.get('/friends/:userId', (req, res) => {
   );
 });
 
-// Real-time messaging
-/*
-io.on('connection', (socket) => {
-  socket.on('chat message', ({ senderId, receiverId, text }) => {
-    const timestamp = new Date().toISOString();
-    db.query(
-      'INSERT INTO messages (sender_id, receiver_id, text, created_at) VALUES (?, ?, ?, ?)',
-      [senderId, receiverId, text, timestamp],
-      (err) => {
-        if (err) return console.error(err);
-        io.emit('chat message', { senderId, receiverId, text, timestamp });
-      }
-    );
-  });
-});
 
-*/
 
 
 
