@@ -13,6 +13,7 @@ function LoginPage() {
     try {
       const res = await axios.post('http://localhost:4000/login', { username, password });
       localStorage.setItem('token', res.data.token); // Store token in local storage
+      localStorage.setItem('userId',res.data.userId)
       navigate('/'); // Redirect to chat page
     } catch (err) {
       setErrorMessage('Invalid credentials');

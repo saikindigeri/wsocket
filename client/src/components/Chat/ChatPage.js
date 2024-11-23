@@ -49,7 +49,7 @@ function ChatPage() {
         {messages.map((msg, index) => (
           <div key={index} className={msg.user === username ? 'my-message' : 'other-message'}>
             <strong>{msg.username}</strong>: {msg.message}
-            <small>{moment(msg.timestamp).format('MMMM Do YYYY, h:mm:ss a')}</small>
+            <small>{moment(msg.timestamp).format(' h:mm:ss a')}</small>
           </div>
         ))}
       </div>
