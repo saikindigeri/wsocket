@@ -231,6 +231,7 @@ app.get('/users', (req, res) => {
 
 
 // Send friend request
+/*
 app.post('/send-request', (req, res) => {
   const { senderId, receiverId } = req.body;
   db.query(
@@ -241,6 +242,55 @@ app.post('/send-request', (req, res) => {
       res.json({ message: 'Friend request sent' });
     }
   );
+});
+
+ */
+app.post('/send-request', (req, res) => {
+  const { senderId, receiverId } = req.body;
+
+  if (!senderId || !receiverId) {
+    return res.status(400).json({ message: 'Sender ID and Receiver ID are required.' });
+  }
+
+  // Check if a pending or accepted request already exists
+  const checkQuery = `
+    SELECT * 
+    FROM friend_requests 
+    WHERE 
+      (sender_id = ? AND receiver_id = ?) 
+      OR 
+      (sender_id = ? AND receiver_id = ?)
+  `;
+
+  db.query(checkQuery, [senderId, receiverId, receiverId, senderId], (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: 'Error checking existing requests.' });
+    }
+
+    // If a request or friendship already exists, prevent sending a new one
+    if (results.length > 0) {
+      const existingRequest = results[0];
+      if (existingRequest.status === 'pending') {
+        return res.status(400).json({ message: 'Friend request is already pending.' });
+      }
+      if (existingRequest.status === 'accepted') {
+        return res.status(400).json({ message: 'You are already friends.' });
+      }
+    }
+
+    // Insert a new friend request
+    const insertQuery = `
+      INSERT INTO friend_requests (sender_id, receiver_id, status) 
+      VALUES (?, ?, 'pending')
+    `;
+
+    db.query(insertQuery, [senderId, receiverId], (insertErr) => {
+      if (insertErr) {
+        return res.status(500).json({ message: 'Error sending friend request.' });
+      }
+      res.json({ message: 'Friend request sent successfully.' });
+    });
+  });
 });
 
 
@@ -270,6 +320,8 @@ app.post('/decline-request', (req, res) => {
     }
   );
 });
+
+
 
 // Fetch friend requests
 app.get('/friend-requests/:userId', (req, res) => {
@@ -301,7 +353,26 @@ app.get('/friends/:userId', (req, res) => {
 
 
 
+app.get('/pending-requests/:userId', (req, res) => {
+  const userId = req.params.userId;
 
+  // Query to fetch pending requests where the user is the receiver
+  const query = `
+    SELECT fr.id AS requestId, u.id AS senderId, u.username AS senderUsername 
+    FROM friend_requests fr
+    JOIN users u ON fr.sender_id = u.id
+    WHERE fr.receiver_id = ? AND fr.status = 'pending';
+  `;
+
+  db.query(query, [userId], (err, results) => {
+    if (err) {
+      console.error('Error fetching pending requests:', err);
+      return res.status(500).json({ error: 'Failed to fetch pending requests.' });
+    }
+
+    res.json(results); // Send pending requests as JSON response
+  });
+});
 
 io.on('connection', (socket) => {
   
