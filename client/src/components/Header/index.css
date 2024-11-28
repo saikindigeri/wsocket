@@ -6,7 +6,7 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
-  background-color: #007bff; /* Or your preferred color */
+  background-color: #04215e; /* Or your preferred color */
   color: white;
   padding: 15px 20px;
   text-align: center;
@@ -18,13 +18,13 @@
 .header-title {
   font-size: 1.8rem;
   font-weight: bold;
-  color: #61dafb; /* Highlighted color for the title */
+  color: #ffffff; /* Highlighted color for the title */
   margin: 0;
 }
 
 /* Logout Button Styles */
 .logout-button {
-  background-color: #dc3545; /* Red background for logout button */
+  background-color: #dc3535; /* Red background for logout button */
   color: white;
   border: none;
   padding: 10px 15px;
