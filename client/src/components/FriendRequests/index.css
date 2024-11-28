@@ -1,0 +1,94 @@
+/* Container styling for the entire component */
+.friend-request-container {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 600px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Heading (Find Users) styling */
+  .friend-request-heading {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #fff;
+    background-color: #4caf50;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  /* Search input styling */
+  .friend-request-search {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  
+  /* User list styling */
+  .friend-request-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .friend-request-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid #ddd;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .friend-request-item:last-child {
+    border-bottom: none;
+  }
+  
+  /* Send Request button styling */
+  .friend-request-button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  .friend-request-button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+  }
+  
+  .friend-request-button:active {
+    transform: scale(1);
+  }
+  
+  /* Status message styling (Already Friends or Request Sent) */
+  .friend-request-status {
+    color: gray;
+    font-style: italic;
+    font-size: 14px;
+  }
+  
+  /* Error message styling */
+  .friend-request-error {
+    margin-top: 20px;
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    font-size: 16px;
+  }
+  

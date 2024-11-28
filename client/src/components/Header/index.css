@@ -1,40 +1,62 @@
-/* Header styles */
-.header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #007bff; /* Blue background */
-    color: white;
-    padding: 10px 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    max-width: 1200px;
-  }
-  
+
+.header-content {
+  width: 100%;
+ width: 1200px;
+ 
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Title Styles */
+.header-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #61dafb; /* Highlighted color for the title */
+  margin: 0;
+}
+
+/* Logout Button Styles */
+.logout-button {
+  background-color: #dc3545; /* Red background for logout button */
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color: #c82333; /* Slightly darker red on hover */
+  transform: scale(1.05); /* Subtle scaling effect */
+}
+
+.logout-button:active {
+  transform: scale(1); /* Reset scaling on click */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
   .header-title {
-    margin: 0;
     font-size: 1.5rem;
-    font-weight: bold;
   }
-  
+
   .logout-button {
-    background-color: #dc3545; /* Red background */
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    font-size: 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    font-size: 0.9rem;
+    padding: 8px 12px;
   }
-  
-  .logout-button:hover {
-    background-color: #c82333; /* Darker red on hover */
+}
+
+@media (max-width: 480px) {
+  .header-content {
+    flex-direction: column;
+    gap: 10px;
   }
-  
+
+  .logout-button {
+    width: 100%;
+  }
+}

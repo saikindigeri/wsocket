@@ -1,0 +1,170 @@
+/* General Reset */
+body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+  
+  body {
+    background-color: #181818; /* Dark background for contrast */
+    color: #ffffff; /* White text for readability */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  
+  /* Main Container */
+  .friend-system-container {
+    background-color: #282c34; /* Darker container for separation */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* Header Titles */
+  h1 {
+    color: #61dafb; /* Highlighted color for main title */
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  
+  h2 {
+    color: #e6e6e6; /* Lighter text for section headers */
+    font-size: 1.5rem;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  /* List Styling */
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  li {
+    background-color: #3c4048; /* Slightly lighter background for list items */
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #ffffff;
+    font-size: 1rem;
+  }
+  
+  li span {
+    flex: 1;
+    text-align: left;
+    color: #d1d1d1; /* Subtle text color */
+  }
+  
+  /* Buttons */
+  button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  /* Accept Button */
+  button.accept-btn {
+    background-color: #28a745; /* Green for accept */
+    color: #ffffff;
+  }
+  
+  button.accept-btn:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+  }
+  
+  /* Decline Button */
+  button.decline-btn {
+    background-color: #dc3545; /* Red for decline */
+    color: #ffffff;
+  }
+  
+  button.decline-btn:hover {
+    background-color: #c82333;
+    transform: scale(1.05);
+  }
+  
+  /* Back Button */
+  button.back-btn {
+    background-color: #007bff; /* Blue for navigation */
+    color: #ffffff;
+    margin-bottom: 15px;
+  }
+  
+  button.back-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+  }
+  
+  /* Friend Links */
+  li.friend-item {
+    cursor: pointer;
+    color: #61dafb;
+    text-decoration: none;
+    transition: color 0.3s ease, font-weight 0.2s ease;
+  }
+  
+  li.friend-item:hover {
+    color: #21a1f1;
+    font-weight: bold;
+  }
+  
+  /* Error Messages */
+  .error-message {
+    margin: 10px 0;
+    color: #ff6b6b; /* Soft red for errors */
+    font-size: 0.9rem;
+    text-align: left;
+  }
+  
+  /* Empty State Message */
+  .empty-state {
+    color: #aaaaaa; /* Gray for subtle messages */
+    font-size: 0.9rem;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 600px) {
+    .friend-system-container {
+      padding: 15px;
+    }
+  
+    h1 {
+      font-size: 1.8rem;
+    }
+  
+    h2 {
+      font-size: 1.2rem;
+    }
+  
+    button {
+      font-size: 0.8rem;
+      padding: 6px 10px;
+    }
+  
+    li {
+      font-size: 0.9rem;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    li span {
+      margin-bottom: 10px;
+    }
+  }
+  

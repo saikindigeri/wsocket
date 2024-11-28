@@ -1,7 +1,7 @@
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './RegisterPage.css';
 
 function RegisterPage() {
   const [username, setUsername] = useState('');
@@ -21,25 +21,27 @@ function RegisterPage() {
 
   return (
     <div className="auth-container">
-      <h2>Register</h2>
-      <form onSubmit={handleRegister}>
+      <h2 className="auth-title">Register</h2>
+      <form onSubmit={handleRegister} className="auth-form">
         <input
           type="text"
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          className="auth-input"
         />
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className="auth-input"
         />
-        <button type="submit">Register</button>
+        <button type="submit" className="auth-button">Register</button>
       </form>
-      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-      <p>
-        Already have an account? <a href="/login">Login here</a>
+      {errorMessage && <p className="auth-error">{errorMessage}</p>}
+      <p className="auth-footer">
+        Already have an account? <a href="/login" className="auth-link">Login here</a>
       </p>
     </div>
   );

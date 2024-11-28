@@ -143,7 +143,7 @@ function ChatPage({ selectedFriend }) {
   };
 console.log(messages,userId)
   return (
-    <div className="chat-container">
+    <div className="chat-container text-black">
       <h2>Chat with {selectedFriend.username}</h2>
       <div className="messages">
         {messages.map((msg, index) => (

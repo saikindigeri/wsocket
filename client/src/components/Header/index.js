@@ -15,14 +15,14 @@ function Header() {
   };
 
   return (
-    <header className="header">
+   
       <div className="header-content">
         <h1 className="header-title">My Application</h1>
         <button className="logout-button" onClick={handleLogout}>
           Logout
         </button>
       </div>
-    </header>
+
   );
 }
 
