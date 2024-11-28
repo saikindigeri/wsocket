@@ -324,6 +324,8 @@ app.post('/decline-request', (req, res) => {
 
 
 // Fetch friend requests
+
+/*
 app.get('/friend-requests/:userId', (req, res) => {
   const { userId } = req.params;
   db.query(
@@ -335,6 +337,36 @@ app.get('/friend-requests/:userId', (req, res) => {
     }
   );
 });
+
+*/
+app.get('/friend-requests/:userId', (req, res) => {
+  const { userId } = req.params;
+
+  // Query to join friend_requests and users tables
+  db.query(
+    `
+    SELECT 
+      friend_requests.id AS request_id,
+      friend_requests.sender_id,
+      friend_requests.receiver_id,
+      friend_requests.status,
+      users.username AS username
+    FROM friend_requests
+    JOIN users ON friend_requests.sender_id = users.id
+    WHERE friend_requests.receiver_id = ? AND friend_requests.status = 'pending'
+    `,
+    [userId],
+    (err, results) => {
+      if (err) {
+        console.error(err); // Log the error for debugging
+        return res.status(500).json({ message: 'Error fetching friend requests' });
+      }
+
+      res.json(results);
+    }
+  );
+});
+
 
 // Fetch accepted friends
 app.get('/friends/:userId', (req, res) => {

@@ -33,9 +33,9 @@ function AppContent() {
         <Route
           path="/register"
           element={
-            <ProtectedRoute isLoginRoute={false}>
+           
               <RegisterPage />
-            </ProtectedRoute>
+          
           }
         />
 

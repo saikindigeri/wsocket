@@ -138,6 +138,7 @@ const FriendSystem = () => {
       try {
         const response = await axios.get(`http://localhost:4000/friend-requests/${userId}`);
         setFriendRequests(response.data);
+        console.log(setFriendRequests)
       } catch (err) {
         setError('Error fetching friend requests.');
       }
