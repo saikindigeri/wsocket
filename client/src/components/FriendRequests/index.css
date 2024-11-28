@@ -1,17 +1,19 @@
 /* Container styling for the entire component */
+/* Container styling for the entire component */
 .friend-request-container {
     margin: 20px auto;
     padding: 20px;
-    max-width: 600px;
+    width: 100%; /* Use full width for mobile */
+    max-width: 900px;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
-  }
-  
-  /* Heading (Find Users) styling */
-  .friend-request-heading {
+}
+
+/* Heading (Find Users) styling */
+.friend-request-heading {
     text-align: center;
     margin-bottom: 20px;
     color: #fff;
@@ -20,10 +22,10 @@
     border-radius: 5px;
     font-size: 20px;
     font-weight: bold;
-  }
-  
-  /* Search input styling */
-  .friend-request-search {
+}
+
+/* Search input styling */
+.friend-request-search {
     display: block;
     width: 100%;
     padding: 10px;
@@ -32,16 +34,17 @@
     border-radius: 5px;
     font-size: 16px;
     box-sizing: border-box;
-  }
-  
-  /* User list styling */
-  .friend-request-list {
+}
+
+/* User list styling */
+.friend-request-list {
     list-style-type: none;
     padding: 0;
     margin: 0;
-  }
-  
-  .friend-request-item {
+}
+
+/* User item styling */
+.friend-request-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -49,14 +52,14 @@
     border-bottom: 1px solid #ddd;
     font-size: 16px;
     color: #333;
-  }
-  
-  .friend-request-item:last-child {
+}
+
+.friend-request-item:last-child {
     border-bottom: none;
-  }
-  
-  /* Send Request button styling */
-  .friend-request-button {
+}
+
+/* Send Request button styling */
+.friend-request-button {
     background-color: #4caf50;
     color: white;
     border: none;
@@ -65,30 +68,85 @@
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.3s, transform 0.2s;
-  }
-  
-  .friend-request-button:hover {
+}
+
+.friend-request-button:hover {
     background-color: #45a049;
     transform: scale(1.05);
-  }
-  
-  .friend-request-button:active {
+}
+
+.friend-request-button:active {
     transform: scale(1);
-  }
-  
-  /* Status message styling (Already Friends or Request Sent) */
-  .friend-request-status {
+}
+
+/* Status message styling (Already Friends or Request Sent) */
+.friend-request-status {
     color: gray;
     font-style: italic;
     font-size: 14px;
-  }
-  
-  /* Error message styling */
-  .friend-request-error {
+}
+
+/* Error message styling */
+.friend-request-error {
     margin-top: 20px;
     color: red;
     font-weight: bold;
     text-align: center;
     font-size: 16px;
-  }
-  
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .friend-request-container {
+        padding: 15px; /* Reduce padding for smaller screens */
+    }
+
+    .friend-request-heading {
+        font-size: 18px; /* Adjust heading size */
+        padding: 8px 12px; /* Adjust padding */
+    }
+
+    .friend-request-search {
+        padding: 8px; /* Reduce padding */
+        font-size: 14px; /* Reduce font size */
+    }
+
+    .friend-request-item {
+        padding: 8px 12px; /* Adjust item padding */
+        font-size: 14px; /* Reduce font size */
+    }
+
+    .friend-request-button {
+        padding: 6px 10px; /* Adjust button padding */
+        font-size: 12px; /* Reduce font size */
+    }
+
+    .friend-request-error {
+        font-size: 14px; /* Adjust error message font size */
+    }
+}
+
+/* Extra small screen responsiveness */
+@media (max-width: 480px) {
+    .friend-request-container {
+        padding: 10px; /* Further reduce padding for very small screens */
+    }
+
+    .friend-request-heading {
+        font-size: 16px; /* Adjust heading font size for small screens */
+        padding: 6px 10px;
+    }
+
+    .friend-request-search {
+        font-size: 12px; /* Adjust font size */
+    }
+
+    .friend-request-item {
+        font-size: 12px; /* Adjust item font size */
+    }
+
+    .friend-request-button {
+        padding: 5px 8px; /* Reduce padding */
+        font-size: 12px; /* Reduce font size */
+    }
+}

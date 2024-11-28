@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './index.css'
+import Header from '../Header';
 
 function FriendRequest() {
   const [users, setUsers] = useState([]);
@@ -106,40 +107,44 @@ function FriendRequest() {
   };
 
   return (
+<>
 
+<div className="friend-request-container">
+     
+     <h3 className="friend-request-heading">Find Users</h3>
+     <input
+       type="text"
+       placeholder="Search users..."
+       value={search}
+       onChange={(e) => setSearch(e.target.value)}
+       className="friend-request-search"
+     />
+     <ul className="friend-request-list">
+       {filteredUsers.map((user) => (
+         <li key={user.id} className="friend-request-item">
+           {user.username}{' '}
+           {!isFriendOrRequested(user.id) ? (
+             <button
+               onClick={() => sendFriendRequest(user.id)}
+               className="friend-request-button"
+             >
+               Send Request
+             </button>
+           ) : (
+             <span className="friend-request-status">
+               {friends.some((friend) => friend.id === user.id)
+                 ? 'Already Friends'
+                 : 'Request Sent'}
+             </span>
+           )}
+         </li>
+       ))}
+     </ul>
+     {error && <p className="friend-request-error">{error}</p>}
+   </div>
+</>
     
-    <div className="friend-request-container">
-  <h3 className="friend-request-heading">Find Users</h3>
-  <input
-    type="text"
-    placeholder="Search users..."
-    value={search}
-    onChange={(e) => setSearch(e.target.value)}
-    className="friend-request-search"
-  />
-  <ul className="friend-request-list">
-    {filteredUsers.map((user) => (
-      <li key={user.id} className="friend-request-item">
-        {user.username}{' '}
-        {!isFriendOrRequested(user.id) ? (
-          <button
-            onClick={() => sendFriendRequest(user.id)}
-            className="friend-request-button"
-          >
-            Send Request
-          </button>
-        ) : (
-          <span className="friend-request-status">
-            {friends.some((friend) => friend.id === user.id)
-              ? 'Already Friends'
-              : 'Request Sent'}
-          </span>
-        )}
-      </li>
-    ))}
-  </ul>
-  {error && <p className="friend-request-error">{error}</p>}
-</div>
+ 
 
   );
 }

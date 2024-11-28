@@ -19,7 +19,7 @@ function AppContent() {
   return (
     <div className="App">
       {/* Conditionally render the header only for protected routes */}
-      {!isAuthRoute && <Header />}
+      {!isAuthRoute && <Header />} 
       <Routes>
         {/* Public Routes */}
         <Route
