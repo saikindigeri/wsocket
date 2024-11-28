@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ChatPage from '../Chat/ChatPage';
 import axios from 'axios';
 import './index.css';
-import Header from '../Header'; // Ensure you have Header imported
+
 
 const FriendSystem = () => {
   const [friendRequests, setFriendRequests] = useState([]);
