@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ChatPage from '../Chat/ChatPage';
 import axios from 'axios';
-// import './index.css';
-
+import Header from '../Header';
 
 const FriendSystem = () => {
   const [friendRequests, setFriendRequests] = useState([]);
@@ -18,7 +17,6 @@ const FriendSystem = () => {
       try {
         const response = await axios.get(`http://localhost:4000/friend-requests/${userId}`);
         setFriendRequests(response.data);
-        console.log(setFriendRequests);
       } catch (err) {
         setError('Error fetching friend requests.');
       }
@@ -65,51 +63,57 @@ const FriendSystem = () => {
     setSelectedFriend(null); // Close the chat box
   };
 
-  console.log(selectedFriend);
-
   return (
-    <div>
-     <h1 className='text-white text-center text-2xl'>Friends Management</h1>
-      
+    <>
+<Header/>
+<div className="min-h-screen bg-white text-white py-10 px-4">
+      <h1 className="text-3xl font-semibold text-center mb-8">Friends Management</h1>
+
       {!selectedFriend ? (
         <>
-        
-          <div  className="friend-system">
-            <h2>Friend Requests</h2>
-            {error && <p className="error">{error}</p>}
+          <div className="mb-10">
+            <h2 className="text-2xl font-bold mb-4">Friend Requests</h2>
+            {error && <p className="text-red-600 mb-4">{error}</p>}
             {friendRequests.length === 0 ? (
-              <p className="no-requests">No pending friend requests.</p>
+              <p className="text-gray-400">No pending friend requests.</p>
             ) : (
-              <ul>
+              <ul className="space-y-4">
                 {friendRequests.map((request) => (
-                  <li key={request.id}>
+                  <li key={request.id} className="flex justify-between items-center bg-gray-700 p-4 rounded-lg">
                     <span>{request.username}</span>
-                    <button
-                      onClick={() => handleAccept(request.request_id)}
-                      className="request-button accept-button"
-                    >
-                      Accept
-                    </button>
-                    <button
-                      onClick={() => handleDecline(request.id)}
-                      className="request-button decline-button"
-                    >
-                      Decline
-                    </button>
+                    <div className="space-x-2">
+                      <button
+                        onClick={() => handleAccept(request.request_id)}
+                        className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-md"
+                      >
+                        Accept
+                      </button>
+                      <button
+                        onClick={() => handleDecline(request.id)}
+                        className="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-md"
+                      >
+                        Decline
+                      </button>
+                    </div>
                   </li>
                 ))}
               </ul>
             )}
           </div>
+
           <div>
-            <h2>Friends</h2>
-            {friendError && <p className="error">{friendError}</p>}
+            <h2 className="text-2xl font-bold mb-4">Friends</h2>
+            {friendError && <p className="text-red-600 mb-4">{friendError}</p>}
             {friends.length === 0 ? (
-              <p className="no-friends">You have no friends yet.</p>
+              <p className="text-gray-400">You have no friends yet.</p>
             ) : (
-              <ul className="friends-list">
+              <ul className="space-y-4">
                 {friends.map((friend) => (
-                  <li key={friend.id} onClick={() => openChat(friend)}>
+                  <li
+                    key={friend.id}
+                    onClick={() => openChat(friend)}
+                    className="cursor-pointer bg-gray-700 p-4 rounded-lg hover:bg-gray-600"
+                  >
                     {friend.username}
                   </li>
                 ))}
@@ -119,13 +123,18 @@ const FriendSystem = () => {
         </>
       ) : (
         <div>
-          <button onClick={closeChat} className="back-button">
+          <button
+            onClick={closeChat}
+            className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md mb-6"
+          >
             Back to Friend List
           </button>
           <ChatPage selectedFriend={selectedFriend} />
         </div>
       )}
     </div>
+    </>
+   
   );
 };
 
