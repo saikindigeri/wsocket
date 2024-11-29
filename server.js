@@ -11,27 +11,29 @@ const cors = require('cors');
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: { origin: 'http://localhost:3000', methods: ['GET', 'POST'] },
+  cors: { origin: process.env.CORS_ORIGIN, methods: ['GET', 'POST'] },
 });
 
-const SECRET_KEY = 'your_secret_key'; // Replace with env variable in production
+
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
 // Database connection
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '', // Replace with your MySQL password
-  database: 'sockets',
+require('dotenv').config();
+
+const SECRET_KEY = process.env.SECRET_KEY; // Define in .env
+const PORT = process.env.PORT || 4000;
+
+const db = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  connectionLimit: 10, // Limit connections for scalability
 });
 
-db.connect((err) => {
-  if (err) throw err;
-  console.log('Connected to MySQL database');
-});
 
 // User registration
 app.post('/register', (req, res) => {
