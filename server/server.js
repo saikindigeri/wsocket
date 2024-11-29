@@ -26,21 +26,63 @@ require('dotenv').config();
 const SECRET_KEY = process.env.SECRET_KEY; // Define in .env
 const PORT = process.env.PORT || 4000;
 
-const db = mysql.createPool({
+const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  connectionLimit: 10, // Limit connections for scalability
+  connectionLimit: 5, // Limit connections for scalability
 });
 
+pool.query(`
+  CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(255) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL
+);
+
+`, (err) => {
+  if (err) throw err;
+  console.log('Users table created or already exists');
+});
+
+pool.query(`
+ CREATE TABLE friend_requests (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  sender_id INT NOT NULL,
+  receiver_id INT NOT NULL,
+  status ENUM('pending', 'accepted', 'declined') DEFAULT 'pending',
+  FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+`, (err) => { 
+  if (err) throw err;
+  console.log('Blogs table created or already exists');
+});
+
+pool.query(`
+  CREATE TABLE messages (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  sender_id INT NOT NULL,
+  receiver_id INT NOT NULL,
+  text TEXT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+`, (err) => {
+  if (err) throw err;
+  console.log('Comments table created or already exists');
+});
 
 // User registration
 app.post('/register', (req, res) => {
   const { username, password } = req.body;
   bcrypt.hash(password, 10, (err, hashedPassword) => {
     if (err) return res.status(500).json({ message: 'Error hashing password' });
-    db.query(
+    pool.query(
       'INSERT INTO users (username, password) VALUES (?, ?)',
       [username, hashedPassword],
       (err) => {
@@ -49,12 +91,12 @@ app.post('/register', (req, res) => {
       }
     );
   });
-});
+}); 
 
 // User login
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
-  db.query('SELECT * FROM users WHERE username = ?', [username], (err, results) => {
+  pool.query('SELECT * FROM users WHERE username = ?', [username], (err, results) => {
     if (err || results.length === 0)
       return res.status(401).json({ message: 'Invalid credentials' });
 
@@ -74,7 +116,7 @@ app.get('/users', (req, res) => {
   const decoded = jwt.verify(token, SECRET_KEY);
   const currentUserId = decoded.id;
 
-  db.query(
+  pool.query(
     'SELECT id, username FROM users WHERE id != ?',
     [currentUserId],
     (err, results) => {
@@ -105,7 +147,7 @@ app.post('/send-request', (req, res) => {
       (sender_id = ? AND receiver_id = ?)
   `;
 
-  db.query(checkQuery, [senderId, receiverId, receiverId, senderId], (err, results) => {
+  pool.query(checkQuery, [senderId, receiverId, receiverId, senderId], (err, results) => {
     if (err) {
       return res.status(500).json({ message: 'Error checking existing requests.' });
     }
@@ -127,7 +169,7 @@ app.post('/send-request', (req, res) => {
       VALUES (?, ?, 'pending')
     `;
 
-    db.query(insertQuery, [senderId, receiverId], (insertErr) => {
+    pool.query(insertQuery, [senderId, receiverId], (insertErr) => {
       if (insertErr) {
         return res.status(500).json({ message: 'Error sending friend request.' });
       }
@@ -141,7 +183,7 @@ app.post('/send-request', (req, res) => {
 // Accept friend request
 app.post('/accept-request', (req, res) => {
   const { requestId } = req.body;
-  db.query(
+  pool.query(
     'UPDATE friend_requests SET status = "accepted" WHERE id = ?',
     [requestId],
     (err) => {
@@ -154,7 +196,7 @@ app.post('/accept-request', (req, res) => {
 // Decline friend request
 app.post('/decline-request', (req, res) => {
   const { requestId } = req.body;
-  db.query(
+  pool.query(
     'UPDATE friend_requests SET status = "declined" WHERE id = ?',
     [requestId],
     (err) => {
@@ -170,7 +212,7 @@ app.get('/friend-requests/:userId', (req, res) => {
   const { userId } = req.params;
 
   // Query to join friend_requests and users tables
-  db.query(
+  pool.query(
     `
     SELECT 
       friend_requests.id AS request_id,
@@ -198,7 +240,7 @@ app.get('/friend-requests/:userId', (req, res) => {
 // Fetch accepted friends
 app.get('/friends/:userId', (req, res) => {
   const { userId } = req.params;
-  db.query(
+  pool.query(
     `SELECT users.id, users.username FROM friend_requests 
      JOIN users ON users.id = friend_requests.sender_id OR users.id = friend_requests.receiver_id
      WHERE (sender_id = ? OR receiver_id = ?) AND status = "accepted" AND users.id != ?`,
@@ -223,7 +265,7 @@ app.get('/pending-requests/:userId', (req, res) => {
     WHERE fr.receiver_id = ? AND fr.status = 'pending';
   `;
 
-  db.query(query, [userId], (err, results) => {
+  pool.query(query, [userId], (err, results) => {
     if (err) {
       console.error('Error fetching pending requests:', err);
       return res.status(500).json({ error: 'Failed to fetch pending requests.' });
@@ -243,7 +285,7 @@ io.on('connection', (socket) => {
     const timestamp = new Date().toISOString();
 
     // Insert the message into the database
-    db.query(
+    pool.query(
       'INSERT INTO messages (sender_id, receiver_id, text, created_at) VALUES (?, ?, ?, ?)',
       [senderId, receiverId, text, timestamp],
       (err) => {
@@ -282,7 +324,7 @@ app.get('/messages/:friendId', (req, res) => {
   }
 
   // Query to fetch messages between the logged-in user and the friend
-  db.query(
+  pool.query(
     `SELECT * FROM messages 
     WHERE (sender_id = ? AND receiver_id = ?) 
        OR (sender_id = ? AND receiver_id = ?)
