@@ -66,8 +66,8 @@ const FriendSystem = () => {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gray-50 text-gray-800 py-10 px-4">
-        <h1 className="text-3xl font-semibold text-center mb-8">Friends Management</h1>
+      <div className="min-h-screen mt-14 bg-white-100 text-gray-800 py-10 px-4">
+     
 
         {!selectedFriend ? (
           <>
