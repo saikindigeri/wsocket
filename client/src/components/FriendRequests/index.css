@@ -1,9 +1,9 @@
-/* Container styling for the entire component */
-/* Container styling for the entire component */
+
+
 .friend-request-container {
     margin: 20px auto;
     padding: 20px;
-    width: 100%; /* Use full width for mobile */
+    width: 100%; 
     max-width: 900px;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
@@ -12,7 +12,7 @@
     font-family: Arial, sans-serif;
 }
 
-/* Heading (Find Users) styling */
+
 .friend-request-heading {
     text-align: center;
     margin-bottom: 20px;
@@ -24,7 +24,7 @@
     font-weight: bold;
 }
 
-/* Search input styling */
+
 .friend-request-search {
     display: block;
     width: 100%;
@@ -36,14 +36,14 @@
     box-sizing: border-box;
 }
 
-/* User list styling */
+
 .friend-request-list {
     list-style-type: none;
     padding: 0;
     margin: 0;
 }
 
-/* User item styling */
+
 .friend-request-item {
     display: flex;
     justify-content: space-between;
@@ -58,7 +58,7 @@
     border-bottom: none;
 }
 
-/* Send Request button styling */
+
 .friend-request-button {
     background-color: #4caf50;
     color: white;
@@ -79,14 +79,14 @@
     transform: scale(1);
 }
 
-/* Status message styling (Already Friends or Request Sent) */
+
 .friend-request-status {
     color: gray;
     font-style: italic;
     font-size: 14px;
 }
 
-/* Error message styling */
+
 .friend-request-error {
     margin-top: 20px;
     color: red;
@@ -95,58 +95,58 @@
     font-size: 16px;
 }
 
-/* Mobile responsiveness */
+
 @media (max-width: 768px) {
     .friend-request-container {
-        padding: 15px; /* Reduce padding for smaller screens */
+        padding: 15px; 
     }
 
     .friend-request-heading {
-        font-size: 18px; /* Adjust heading size */
-        padding: 8px 12px; /* Adjust padding */
+        font-size: 18px; 
+        padding: 8px 12px; 
     }
 
     .friend-request-search {
-        padding: 8px; /* Reduce padding */
-        font-size: 14px; /* Reduce font size */
+        padding: 8px; 
+        font-size: 14px; 
     }
 
     .friend-request-item {
-        padding: 8px 12px; /* Adjust item padding */
-        font-size: 14px; /* Reduce font size */
+        padding: 8px 12px; 
+        font-size: 14px; 
     }
 
     .friend-request-button {
-        padding: 6px 10px; /* Adjust button padding */
-        font-size: 12px; /* Reduce font size */
+        padding: 6px 10px; 
+        font-size: 12px; 
     }
 
     .friend-request-error {
-        font-size: 14px; /* Adjust error message font size */
+        font-size: 14px; 
     }
 }
 
-/* Extra small screen responsiveness */
+
 @media (max-width: 480px) {
     .friend-request-container {
-        padding: 10px; /* Further reduce padding for very small screens */
+        padding: 10px; 
     }
 
     .friend-request-heading {
-        font-size: 16px; /* Adjust heading font size for small screens */
+        font-size: 16px; 
         padding: 6px 10px;
     }
 
     .friend-request-search {
-        font-size: 12px; /* Adjust font size */
+        font-size: 12px; 
     }
 
     .friend-request-item {
-        font-size: 12px; /* Adjust item font size */
+        font-size: 12px; 
     }
 
     .friend-request-button {
-        padding: 5px 8px; /* Reduce padding */
-        font-size: 12px; /* Reduce font size */
+        padding: 5px 8px; 
+        font-size: 12px; 
     }
 }

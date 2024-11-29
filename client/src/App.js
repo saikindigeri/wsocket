@@ -10,6 +10,7 @@ import FriendRequests from './components/FriendRequests';
 import FriendSystem from './components/FriendSystem';
 import Header from './components/Header';
 import ProtectedRoute from './components/ProtectedRoute'; // Import ProtectedRoute
+import LandingPage from './components/LandingPage';
 
 function AppContent() {
   const location = useLocation();
@@ -19,15 +20,15 @@ function AppContent() {
   return (
     <div className="App">
       {/* Conditionally render the header only for protected routes */}
-      {!isAuthRoute && <Header />} 
+     
       <Routes>
         {/* Public Routes */}
         <Route
           path="/login"
           element={
-            <ProtectedRoute isLoginRoute={isLoginRoute}>
+            
               <LoginPage />
-            </ProtectedRoute>
+         
           }
         />
         <Route
@@ -39,9 +40,11 @@ function AppContent() {
           }
         />
 
+<Route path="/" element={<LandingPage/>} />
+
         {/* Protected Routes */}
         <Route
-          path="/"
+          path="/requests"
           element={
             <ProtectedRoute isLoginRoute={false}>
               <FriendRequests />
@@ -64,6 +67,8 @@ function AppContent() {
             </ProtectedRoute>
           }
         />
+
+       
       </Routes>
     </div>
   );

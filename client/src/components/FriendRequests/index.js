@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './index.css'
+//import './index.css'
 import Header from '../Header';
 
 function FriendRequest() {

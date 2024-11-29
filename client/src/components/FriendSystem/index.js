@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ChatPage from '../Chat/ChatPage';
 import axios from 'axios';
-import './index.css';
+// import './index.css';
 
 
 const FriendSystem = () => {

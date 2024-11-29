@@ -71,7 +71,7 @@ import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
 import moment from 'moment';
-import './ChatPage.css';
+// import './ChatPage.css';
 
 const socket = io('http://localhost:4000');
 
