@@ -45,7 +45,7 @@ export default function Header() {
     navigate("/")
   }
   return (
-    <header className="bg-white">
+    <header className="bg-white text-base/7  ">
       <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
         <div className="flex lg:flex-1">
           <a href="#" className="-m-1.5 p-1.5">
@@ -69,7 +69,7 @@ export default function Header() {
         </div>
         <PopoverGroup className="hidden lg:flex lg:gap-x-12">
           <Popover className="relative">
-            <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900">
+            <PopoverButton className="flex items-center gap-x-1 text-sm/6  text-gray-900">
               Product
               <ChevronDownIcon aria-hidden="true" className="size-5 flex-none text-gray-400" />
             </PopoverButton>
@@ -88,7 +88,7 @@ export default function Header() {
                       <item.icon aria-hidden="true" className="size-6 text-gray-600 group-hover:text-indigo-600" />
                     </div>
                     <div className="flex-auto">
-                      <a href={item.href} className="block font-semibold text-gray-900">
+                      <a href={item.href} className="block  text-gray-900">
                         {item.name}
                         <span className="absolute inset-0" />
                       </a>
@@ -112,13 +112,13 @@ export default function Header() {
             </PopoverPanel>
           </Popover>
 
-          <a href="#" className="text-sm/6 font-semibold text-gray-900">
+          <a href="#" className="text-sm/6  text-gray-900">
             Features
           </a>
-          <a href="#" className="text-sm/6 font-semibold text-gray-900">
+          <a href="#" className="text-sm/6  text-gray-900">
             Marketplace
           </a>
-          <a href="#" className="text-sm/6 font-semibold text-gray-900">
+          <a href="#" className="text-sm/6  text-gray-900">
             Company
           </a>
         </PopoverGroup>
