@@ -11,6 +11,7 @@ import FriendSystem from './components/FriendSystem';
 import Header from './components/Header';
 import ProtectedRoute from './components/ProtectedRoute'; // Import ProtectedRoute
 import LandingPage from './components/LandingPage';
+import PageUnderConstruction from './components/PageUnderConstruction';
 
 function AppContent() {
   const location = useLocation();
@@ -64,6 +65,14 @@ function AppContent() {
           element={
             <ProtectedRoute isLoginRoute={false}>
               <ChatPage />
+            </ProtectedRoute>
+          }
+        />
+         <Route
+          path="/under-construction"
+          element={
+            <ProtectedRoute isLoginRoute={false}>
+              <PageUnderConstruction />
             </ProtectedRoute>
           }
         />

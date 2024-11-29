@@ -69,10 +69,7 @@ export default function Header() {
         </div>
         <PopoverGroup className="hidden lg:flex lg:gap-x-12">
           <Popover className="relative">
-            <PopoverButton className="flex items-center gap-x-1 text-sm/6  text-gray-900">
-              Product
-              <ChevronDownIcon aria-hidden="true" className="size-5 flex-none text-gray-400" />
-            </PopoverButton>
+          
 
             <PopoverPanel
               transition
@@ -112,14 +109,14 @@ export default function Header() {
             </PopoverPanel>
           </Popover>
 
-          <a href="#" className="text-sm/6  text-gray-900">
-            Features
+          <a href="/friends" className="text-sm/6  text-gray-900">
+            Friends
           </a>
-          <a href="#" className="text-sm/6  text-gray-900">
-            Marketplace
+          <a href="/requests" className="text-sm/6  text-gray-900">
+            Friend Requests
           </a>
-          <a href="#" className="text-sm/6  text-gray-900">
-            Company
+          <a href="/under-construction" className="text-sm/6  text-gray-900">
+            Groups
           </a>
         </PopoverGroup>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">

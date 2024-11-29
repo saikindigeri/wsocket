@@ -80,7 +80,7 @@ const FriendSystem = () => {
                 <ul className="space-y-4">
                   {friendRequests.map((request) => (
                     <li key={request.id} className="flex justify-between items-center bg-gray-100 p-4 rounded-lg">
-                      <span>{request.username}</span>
+                      <span className="font-semibold">{request.username}</span>
                       <div className="space-x-2">
                         <button
                           onClick={() => handleAccept(request.request_id)}
@@ -124,12 +124,7 @@ const FriendSystem = () => {
           </>
         ) : (
           <div>
-            <button
-              onClick={closeChat}
-              className="bg-blue-500 hover:bg-blue-400 text-white px-4 py-2 rounded-md mb-6"
-            >
-              Back to Friend List
-            </button>
+           
             <ChatPage selectedFriend={selectedFriend} />
           </div>
         )}

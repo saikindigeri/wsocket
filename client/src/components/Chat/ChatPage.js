@@ -143,27 +143,26 @@ function ChatPage({ selectedFriend }) {
   };
 console.log(messages,userId)
   return (
-    <div className="chat-container bg-gradient-to-r  text-white  rounded-sm shadow-lg">
+    <div className="chat-container p-4 md:p-8 bg-blue-200 bg-gradient-to-r text-white rounded-lg shadow-lg max-w-3xl mx-auto">
   <h2 className="text-3xl text-center mb-6 text-black">Chat with {selectedFriend.username}</h2>
 
-  <div className=" messages space-y-4 overflow-y-auto max-h-80 mb-6 rounded-lg bg-gray-400 ">
+  <div className=" messages space-y-4 overflow-y-auto max-h-80 mb-6 rounded-lg ">
     {messages.map((msg, index) => (
       <div
         key={index}
-        className={`flex ${msg.sender_id == userId ? 'justify-end ' : 'justify-start'}`}
+        className={`flex ${msg.sender_id == userId ? 'justify-end self-start rounded-bl-none' : 'justify-start'}`}
       >
         <div
           className={`p-4 max-w-xs rounded-lg shadow-md m-5  ${
-            msg.sender_id === userId
-              ? 'bg-blue-600 text-white'
-              : 'bg-white text-black border border-gray-300'
+            msg.sender_id == userId
+              ? 'bg-indigo-400 text-white self-end rounded-br-none '
+              : 'bg-white text-blue-900 self-start rounded-bl-none border-gray-300'
           }`}
         >
-          <strong className="block ">
-            {msg.sender_id == userId ? 'You' : selectedFriend.username}
-          </strong>
+          
+         
           <p className="text-sm">{msg.text}</p>
-          <small className="text-sm text-gray-400">
+         <small className="text-sm/1 text-white-400">
           {moment(msg.created_at).format('DD/MM/YYYY h:mm A')}
           </small>
         </div>
@@ -171,13 +170,13 @@ console.log(messages,userId)
     ))}
   </div>
 
-  <div className="input-container flex items-center space-x-3">
+  <div className="input-container flex p-2 items-center space-x-3">
     <input
       type="text"
       value={message}
       onChange={(e) => setMessage(e.target.value)}
       placeholder="Type a message..."
-      className="w-full p-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
+      className="w-full p-4 text-center text-blue-400 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
     />
     <button
       onClick={handleSendMessage}

@@ -1,54 +1,52 @@
-
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-//import './index.css'
 import Header from '../Header';
 
 function FriendRequest() {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState('');
-  const [error, setError] = useState(null); // State for errors
+  const [error, setError] = useState(null);
   const [filteredUsers, setFilteredUsers] = useState([]);
-  const [friends, setFriends] = useState([]); // List of current friends
-  const [pendingRequests, setPendingRequests] = useState([]); // List of pending friend requests
+  const [friends, setFriends] = useState([]);
+  const [pendingRequests, setPendingRequests] = useState([]);
 
   const userId = localStorage.getItem('userId');
 
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem('token'); // Assume token is stored in localStorage
-
+      const token = localStorage.getItem('token');
       if (!token) {
         setError('Authentication token is missing.');
         return;
       }
 
       try {
-        // Fetch all users
         const response = await axios.get('http://localhost:4000/users', {
           headers: {
-            Authorization: token, // Send token in the Authorization header
+            Authorization: token,
           },
         });
 
         setUsers(response.data);
 
-        // Fetch friends
-        const friendsResponse = await axios.get(`http://localhost:4000/friends/${userId}`, {
-          headers: {
-            Authorization: token,
-          },
-        });
+        const friendsResponse = await axios.get(
+          `http://localhost:4000/friends/${userId}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
 
-        // Fetch pending friend requests
-        const requestsResponse = await axios.get(`http://localhost:4000/pending-requests/${userId}`, {
-          headers: {
-            Authorization: token,
-          },
-        });
+        const requestsResponse = await axios.get(
+          `http://localhost:4000/pending-requests/${userId}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
 
-        // Update state
         setFriends(friendsResponse.data);
         setPendingRequests(requestsResponse.data);
       } catch (err) {
@@ -73,8 +71,8 @@ function FriendRequest() {
 
   const isFriendOrRequested = (userIdToCheck) => {
     return (
-      friends.some((friend) => friend.id === userIdToCheck) || // Check if already friends
-      pendingRequests.some((request) => request.receiverId === userIdToCheck) // Check if request is pending
+      friends.some((friend) => friend.id === userIdToCheck) ||
+      pendingRequests.some((request) => request.receiverId === userIdToCheck)
     );
   };
 
@@ -92,14 +90,13 @@ function FriendRequest() {
 
       alert(response.data.message);
 
-      // Update the pendingRequests state to reflect the new request
       setPendingRequests((prev) => [
         ...prev,
         { senderId: userId, receiverId, status: 'pending' },
       ]);
     } catch (err) {
       if (err.response) {
-        alert(err.response.data.message); // Show the error message from the backend
+        alert(err.response.data.message);
       } else {
         alert('An error occurred while sending the friend request.');
       }
@@ -107,45 +104,52 @@ function FriendRequest() {
   };
 
   return (
-<>
-
-<div className="friend-request-container">
-     
-     <h3 className="friend-request-heading">Find Users</h3>
-     <input
-       type="text"
-       placeholder="Search users..."
-       value={search}
-       onChange={(e) => setSearch(e.target.value)}
-       className="friend-request-search"
-     />
-     <ul className="friend-request-list">
-       {filteredUsers.map((user) => (
-         <li key={user.id} className="friend-request-item">
-           {user.username}{' '}
-           {!isFriendOrRequested(user.id) ? (
-             <button
-               onClick={() => sendFriendRequest(user.id)}
-               className="friend-request-button"
-             >
-               Send Request
-             </button>
-           ) : (
-             <span className="friend-request-status">
-               {friends.some((friend) => friend.id === user.id)
-                 ? 'Already Friends'
-                 : 'Request Sent'}
-             </span>
-           )}
-         </li>
-       ))}
-     </ul>
-     {error && <p className="friend-request-error">{error}</p>}
-   </div>
-</>
-    
- 
-
+    <>
+    <Header /> 
+    <div className="p-6 mt-14 bg-gray-100 min-h-screen">
+      
+      <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
+        <h3 className="text-2xl font-semibold text-gray-800 mb-4">
+          Find Users
+        </h3>
+        <input
+          type="text"
+          placeholder="Search users..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-6"
+        />
+        <ul className="space-y-4">
+          {filteredUsers.map((user) => (
+            <li
+              key={user.id}
+              className="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow-sm"
+            >
+              <span className="text-gray-700">{user.username}</span>
+              {!isFriendOrRequested(user.id) ? (
+                <button
+                  onClick={() => sendFriendRequest(user.id)}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none"
+                >
+                  Send Request
+                </button>
+              ) : (
+                <span className="text-sm text-gray-500">
+                  {friends.some((friend) => friend.id === user.id)
+                    ? 'Already Friends'
+                    : 'Request Sent'}
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+        {error && (
+          <p className="mt-4 text-red-500 text-sm text-center">{error}</p>
+        )}
+      </div>
+    </div>
+    </>
+   
   );
 }
 
