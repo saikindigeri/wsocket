@@ -143,34 +143,51 @@ function ChatPage({ selectedFriend }) {
   };
 console.log(messages,userId)
   return (
-    <div className="chat-container text-black">
-      <h2>Chat with {selectedFriend.username}</h2>
-      <div className="messages">
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={
-              msg.sender_id == userId ? 'my-message' : 'other-message'
-            }
-          >
-            <strong>
-              {msg.sender_id == userId ? 'You' : selectedFriend.username}
-            </strong>
-            : {msg.text} 
-            <small>{moment(msg.timestamp).format('h:mm')}</small>
-          </div>
-        ))}
+    <div className="chat-container bg-gradient-to-r  text-white  rounded-sm shadow-lg">
+  <h2 className="text-3xl text-center mb-6 text-black">Chat with {selectedFriend.username}</h2>
+
+  <div className=" messages space-y-4 overflow-y-auto max-h-80 mb-6 rounded-lg bg-gray-400 ">
+    {messages.map((msg, index) => (
+      <div
+        key={index}
+        className={`flex ${msg.sender_id == userId ? 'justify-end ' : 'justify-start'}`}
+      >
+        <div
+          className={`p-4 max-w-xs rounded-lg shadow-md m-5  ${
+            msg.sender_id === userId
+              ? 'bg-blue-600 text-white'
+              : 'bg-white text-black border border-gray-300'
+          }`}
+        >
+          <strong className="block ">
+            {msg.sender_id == userId ? 'You' : selectedFriend.username}
+          </strong>
+          <p className="text-sm">{msg.text}</p>
+          <small className="text-sm text-gray-400">
+          {moment(msg.created_at).format('DD/MM/YYYY h:mm A')}
+          </small>
+        </div>
       </div>
-      <div className="input-container">
-        <input
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Type a message..."
-        />
-        <button onClick={handleSendMessage}>Send</button>
-      </div>
-    </div>
+    ))}
+  </div>
+
+  <div className="input-container flex items-center space-x-3">
+    <input
+      type="text"
+      value={message}
+      onChange={(e) => setMessage(e.target.value)}
+      placeholder="Type a message..."
+      className="w-full p-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
+    />
+    <button
+      onClick={handleSendMessage}
+      className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+    >
+      Send
+    </button>
+  </div>
+</div>
+
   );
 }
 
