@@ -37,7 +37,7 @@ function LoginPage() {
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
             <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
-              Email address
+             Username
             </label>
             <div className="mt-2">
               <input
