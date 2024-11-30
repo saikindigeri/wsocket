@@ -1,5 +1,4 @@
 
-/*
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
@@ -11,28 +10,90 @@ const cors = require('cors');
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: { origin: 'http://localhost:3000', methods: ['GET', 'POST'] },
+  cors: { origin: 'https://wsocket.vercel.app', methods: ['GET', 'POST'] },
 });
- 
-const SECRET_KEY = 'your_secret_key'; // Replace with env variable in production
 
+
+const SECRET_KEY = "secret_key"; // Replace with env variable in production
+const PORT = process.env.PORT || 4000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-
+ 
+require('dotenv').config();
 // Database connection
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '', // Replace with your MySQL password
-  database: 'sockets',
-}); 
-
-db.connect((err) => {
-  if (err) throw err;
-  console.log('Connected to MySQL database');
-});
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,// Replace with env variable in production
+  database: process.env.DB_NAME,
+});  
  
+db.connect((err) => {
+  if (err) {
+    console.error('Error connecting to MySQL database:', err);
+    process.exit(1);
+  }
+  console.log('Connected to MySQL database');
+
+  // Create tables if they don't exist
+  const createUsersTable = `
+    CREATE TABLE IF NOT EXISTS users (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      username VARCHAR(255) UNIQUE NOT NULL,
+      password VARCHAR(255) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `;
+
+  const createFriendRequestsTable = `
+    CREATE TABLE IF NOT EXISTS friend_requests (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      sender_id INT NOT NULL,
+      receiver_id INT NOT NULL,
+      status ENUM('pending', 'accepted', 'declined') DEFAULT 'pending',
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
+      FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE
+    )
+  `;
+
+  const createMessagesTable = `
+    CREATE TABLE IF NOT EXISTS messages (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      sender_id INT NOT NULL,
+      receiver_id INT NOT NULL,
+      text TEXT NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
+      FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE
+    )
+  `;
+
+  db.query(createUsersTable, (err) => {
+    if (err) {
+      console.error('Error creating users table:', err);
+    } else {
+      console.log('Users table created or already exists');
+    }
+  });
+
+  db.query(createFriendRequestsTable, (err) => {
+    if (err) {
+      console.error('Error creating friend_requests table:', err);
+    } else {
+      console.log('FriendRequests table created or already exists');
+    }
+  });
+
+  db.query(createMessagesTable, (err) => {
+    if (err) {
+      console.error('Error creating messages table:', err);
+    } else {
+      console.log('Messages table created or already exists');
+    }
+  });
+});
 // User registration
 app.post('/register', (req, res) => {
   const { username, password } = req.body;
@@ -55,23 +116,24 @@ app.post('/login', (req, res) => {
   db.query('SELECT * FROM users WHERE username = ?', [username], (err, results) => {
     if (err || results.length === 0)
       return res.status(401).json({ message: 'Invalid credentials' });
-
+ 
     const user = results[0];
     const userId=user.id
     bcrypt.compare(password, user.password, (err, isMatch) => {
       if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
-      const token = jwt.sign({ id: user.id }, SECRET_KEY);
+      const token = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn: '1h' });
+
       res.json({ token, username, userId});
     });
   });
-});
+}); 
  
 // Fetch all registered users
 app.get('/users', (req, res) => {
   const token = req.headers.authorization; // Get token from request headers
   const decoded = jwt.verify(token, SECRET_KEY);
   const currentUserId = decoded.id;
-
+ 
   db.query(
     'SELECT id, username FROM users WHERE id != ?',
     [currentUserId],
@@ -238,12 +300,13 @@ io.on('connection', (socket) => {
 
   // Listen for chat messages
   socket.on('chat message', ({ senderId, receiverId, text }) => {
-    const timestamp = new Date().toISOString();
+    const now = new Date();
+    const formattedDate = now.toISOString().slice(0, 19).replace('T', ' ')
 
     // Insert the message into the database
     db.query(
       'INSERT INTO messages (sender_id, receiver_id, text, created_at) VALUES (?, ?, ?, ?)',
-      [senderId, receiverId, text, timestamp],
+      [senderId, receiverId, text, formattedDate],
       (err) => {
         if (err) {
           console.error('Error storing message:', err);
@@ -255,16 +318,14 @@ io.on('connection', (socket) => {
           senderId,
           receiverId,
           text,
-          timestamp,
+          formattedDate,
         });
       }
     );
   });
 
   // Handle user disconnection
-  socket.on('disconnect', () => {
-    console.log(`User disconnected: ${socket.id}`);
-  });
+ 
 });
 
 
@@ -296,231 +357,6 @@ app.get('/messages/:friendId', (req, res) => {
 });
 
  
-// Start server
-server.listen(4000, () => {
-  console.log('Server running on http://localhost:4000');
-});
- */
-
-const express = require('express');
-const http = require('http');
-const { Server } = require('socket.io');
-const mysql = require('mysql2');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const cors = require('cors');
-require('dotenv').config();
-
-const app = express();
-const server = http.createServer(app);
-const io = new Server(server, {
-  cors: { origin: process.env.CLIENT_URL || '*', methods: ['GET', 'POST'] },
-});
-
-const PORT = process.env.PORT || 4000;
-const SECRET_KEY = process.env.SECRET_KEY || 'your_secret_key'; // Use environment variables for security
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-// Database connection
-const db = mysql.createConnection({
-  host: process.env.DB_HOST ,
-  user: process.env.DB_USER ,
-  password: process.env.DB_PASSWORD , // Replace with env variable in production
-  database: process.env.DB_NAME 
-}); 
- 
-db.connect((err) => {
-  if (err) {
-    console.error('Error connecting to MySQL database:', err);
-    process.exit(1);
-  }
-  console.log('Connected to MySQL database');
-});
-
-// User registration
-app.post('/register', (req, res) => {
-  const { username, password } = req.body;
-  bcrypt.hash(password, 10, (err, hashedPassword) => {
-    if (err) return res.status(500).json({ message: 'Error hashing password' });
-    db.query(
-      'INSERT INTO users (username, password) VALUES (?, ?)',
-      [username, hashedPassword],
-      (err) => {
-        if (err) return res.status(400).json({ message: 'User already exists' });
-        res.json({ message: 'User registered successfully' });
-      }
-    );
-  });
-});
-
-// User login
-app.post('/login', (req, res) => {
-  const { username, password } = req.body;
-  db.query('SELECT * FROM users WHERE username = ?', [username], (err, results) => {
-    if (err || results.length === 0)
-      return res.status(401).json({ message: 'Invalid credentials' });
-
-    const user = results[0];
-    bcrypt.compare(password, user.password, (err, isMatch) => {
-      if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
-      const token = jwt.sign({ id: user.id }, SECRET_KEY);
-      res.json({ token, username, userId: user.id });
-    });
-  });
-});
-
-// Fetch all registered users
-app.get('/users', (req, res) => {
-  const token = req.headers.authorization.split(' ')[1]; // Get token from headers
-  const decoded = jwt.verify(token, SECRET_KEY);
-  const currentUserId = decoded.id;
-
-  db.query(
-    'SELECT id, username FROM users WHERE id != ?',
-    [currentUserId],
-    (err, results) => {
-      if (err) {
-        return res.status(500).json({ error: 'Error fetching users' });
-      }
-      res.json(results);
-    }
-  );
-});
-
-// Send friend request
-app.post('/send-request', (req, res) => {
-  const { senderId, receiverId } = req.body;
-
-  if (!senderId || !receiverId) {
-    return res.status(400).json({ message: 'Sender ID and Receiver ID are required.' });
-  }
-
-  const checkQuery = `
-    SELECT * 
-    FROM friend_requests 
-    WHERE 
-      (sender_id = ? AND receiver_id = ?) 
-      OR 
-      (sender_id = ? AND receiver_id = ?)
-  `;
-
-  db.query(checkQuery, [senderId, receiverId, receiverId, senderId], (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: 'Error checking existing requests.' });
-    }
-
-    if (results.length > 0) {
-      const existingRequest = results[0];
-      if (existingRequest.status === 'pending') {
-        return res.status(400).json({ message: 'Friend request is already pending.' });
-      }
-      if (existingRequest.status === 'accepted') {
-        return res.status(400).json({ message: 'You are already friends.' });
-      }
-    }
-
-    const insertQuery = `
-      INSERT INTO friend_requests (sender_id, receiver_id, status) 
-      VALUES (?, ?, 'pending')
-    `;
-
-    db.query(insertQuery, [senderId, receiverId], (insertErr) => {
-      if (insertErr) {
-        return res.status(500).json({ message: 'Error sending friend request.' });
-      }
-      res.json({ message: 'Friend request sent successfully.' });
-    });
-  });
-});
-
-// Accept friend request
-app.post('/accept-request', (req, res) => {
-  const { requestId } = req.body;
-  db.query(
-    'UPDATE friend_requests SET status = "accepted" WHERE id = ?',
-    [requestId],
-    (err) => {
-      if (err) return res.status(500).json({ message: 'Error accepting request' });
-      res.json({ message: 'Friend request accepted' });
-    }
-  );
-});
-
-// Decline friend request
-app.post('/decline-request', (req, res) => {
-  const { requestId } = req.body;
-  db.query(
-    'UPDATE friend_requests SET status = "declined" WHERE id = ?',
-    [requestId],
-    (err) => {
-      if (err) return res.status(500).json({ message: 'Error declining request' });
-      res.json({ message: 'Friend request declined' });
-    }
-  );
-});
-
-// Fetch friend requests
-app.get('/friend-requests/:userId', (req, res) => {
-  const { userId } = req.params;
-  db.query(
-    `SELECT friend_requests.id AS request_id, friend_requests.sender_id, friend_requests.receiver_id,
-      friend_requests.status, users.username AS username
-     FROM friend_requests
-     JOIN users ON friend_requests.sender_id = users.id
-     WHERE friend_requests.receiver_id = ? AND friend_requests.status = 'pending'`,
-    [userId],
-    (err, results) => {
-      if (err) return res.status(500).json({ message: 'Error fetching friend requests' });
-      res.json(results);
-    }
-  );
-});
-
-// Fetch friends
-app.get('/friends/:userId', (req, res) => {
-  const { userId } = req.params;
-  db.query(
-    `SELECT users.id, users.username FROM friend_requests 
-     JOIN users ON users.id = friend_requests.sender_id OR users.id = friend_requests.receiver_id
-     WHERE (sender_id = ? OR receiver_id = ?) AND status = "accepted" AND users.id != ?`,
-    [userId, userId, userId],
-    (err, results) => {
-      if (err) return res.status(500).json({ message: 'Error fetching friends' });
-      res.json(results);
-    }
-  );
-});
-
-// Handle real-time chat messages
-io.on('connection', (socket) => {
-  socket.on('chat message', ({ senderId, receiverId, text }) => {
-    const timestamp = new Date().toISOString();
-    db.query(
-      'INSERT INTO messages (sender_id, receiver_id, text, created_at) VALUES (?, ?, ?, ?)',
-      [senderId, receiverId, text, timestamp],
-      (err) => {
-        if (err) {
-          console.error('Error storing message:', err);
-          return;
-        }
-        io.to(senderId).to(receiverId).emit('chat message', {
-          senderId,
-          receiverId,
-          text,
-          timestamp,
-        });
-      }
-    );
-  });
-
-  socket.on('disconnect', () => {
-    console.log(`User disconnected: ${socket.id}`);
-  });
-});
-
 // Start server
 server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
