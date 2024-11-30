@@ -21,7 +21,7 @@ function FriendRequest() {
       }
 
       try {
-        const response = await axios.get('https://wsocket-3.onrender.com/users', {
+        const response = await axios.get('https://wsocket-5.onrender.com/users', {
           headers: {
             Authorization: token,
           },
@@ -39,7 +39,7 @@ function FriendRequest() {
         );
 
         const requestsResponse = await axios.get(
-          `https://wsocket-3.onrender.com/pending-requests/${userId}`,
+          `https://wsocket-5.onrender.com/pending-requests/${userId}`,
           {
             headers: {
               Authorization: token,
@@ -79,7 +79,7 @@ function FriendRequest() {
   const sendFriendRequest = async (receiverId) => {
     try {
       const response = await axios.post(
-        'https://wsocket-3.onrender.com/send-request',
+        'https://wsocket-5.onrender.com/send-request',
         { senderId: userId, receiverId },
         {
           headers: {

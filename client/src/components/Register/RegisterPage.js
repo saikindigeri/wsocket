@@ -11,7 +11,7 @@ function RegisterPage() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('https://wsocket-3.onrender.com/register', { username, password });
+      await axios.post('https://wsocket-5.onrender.com/register', { username, password });
       navigate('/login'); // Redirect to login page after successful registration
     } catch (err) {
       setErrorMessage('Error during registration');
