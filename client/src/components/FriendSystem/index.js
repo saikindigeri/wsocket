@@ -15,7 +15,7 @@ const FriendSystem = () => {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/friend-requests/${userId}`);
+        const response = await axios.get(`https://wsocket-3.onrender.com/friend-requests/${userId}`);
         setFriendRequests(response.data);
       } catch (err) {
         setError('Error fetching friend requests.');
@@ -24,7 +24,7 @@ const FriendSystem = () => {
 
     const fetchFriends = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/friends/${userId}`);
+        const response = await axios.get(`https://wsocket-3.onrender.com/friends/${userId}`);
         setFriends(response.data);
       } catch (err) {
         setFriendError('Error fetching friends.');
@@ -37,7 +37,7 @@ const FriendSystem = () => {
 
   const handleAccept = async (requestId) => {
     try {
-      await axios.post('http://localhost:4000/accept-request', { requestId });
+      await axios.post('https://wsocket-3.onrender.com/accept-request', { requestId });
       setFriendRequests((prev) => prev.filter((request) => request.id !== requestId));
       alert('Friend request accepted');
     } catch (err) {
@@ -47,7 +47,7 @@ const FriendSystem = () => {
 
   const handleDecline = async (requestId) => {
     try {
-      await axios.post('http://localhost:4000/decline-request', { requestId });
+      await axios.post('https://wsocket-3.onrender.com/decline-request', { requestId });
       setFriendRequests((prev) => prev.filter((request) => request.id !== requestId));
       alert('Friend request declined');
     } catch (err) {

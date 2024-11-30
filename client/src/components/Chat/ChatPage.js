@@ -73,7 +73,7 @@ import axios from 'axios';
 import moment from 'moment';
 // import './ChatPage.css';
 
-const socket = io('http://localhost:4000');
+const socket = io('https://wsocket-3.onrender.com');
 
 function ChatPage({ selectedFriend }) {
   const [message, setMessage] = useState('');
@@ -90,7 +90,7 @@ function ChatPage({ selectedFriend }) {
     const fetchMessages = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/messages/${selectedFriend.id}`,
+          `https://wsocket-3.onrender.com/messages/${selectedFriend.id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
