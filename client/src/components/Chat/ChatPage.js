@@ -143,8 +143,8 @@ function ChatPage({ selectedFriend }) {
   };
 console.log(messages,userId)
   return (
-    <div className="chat-container p-4 md:p-8 bg-blue-200 bg-gradient-to-r text-white rounded-lg shadow-lg max-w-3xl mx-auto">
-  <h2 className="text-3xl text-center mb-6 text-black">Chat with {selectedFriend.username}</h2>
+    <div className="chat-container p-4 md:p-8 bg-blue-400 bg-gradient-to-r text-white rounded-lg shadow-lg max-w-3xl mx-auto">
+  <h2 className="text-2xl text-center mb-6 font-mono font-semibold text-black">Chat with {selectedFriend.username}</h2>
 
   <div className=" messages space-y-4 overflow-y-auto max-h-80 mb-6 rounded-lg ">
     {messages.map((msg, index) => (
@@ -155,8 +155,8 @@ console.log(messages,userId)
         <div
           className={`p-4 max-w-xs rounded-lg shadow-md m-5  ${
             msg.sender_id == userId
-              ? 'bg-indigo-400 text-white self-end rounded-br-none '
-              : 'bg-white text-blue-900 self-start rounded-bl-none border-gray-300'
+              ? 'bg-indigo-800 text-white self-end rounded-br-none '
+              : 'bg-gray-200 text-black self-start rounded-bl-none border-gray-300'
           }`}
         >
           
@@ -176,7 +176,7 @@ console.log(messages,userId)
       value={message}
       onChange={(e) => setMessage(e.target.value)}
       placeholder="Type a message..."
-      className="w-full p-4 text-center text-blue-400 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
+      className="w-full p-4 text-center text-black rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
     />
     <button
       onClick={handleSendMessage}

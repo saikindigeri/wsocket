@@ -52,7 +52,7 @@ export default function Header() {
             <span className="sr-only">Your Company</span>
             <img
               alt=""
-              src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
+              src="https://res.cloudinary.com/dpdejfl2k/image/upload/v1733116676/txjkwonfikizve3ljwe4.png"
               className="h-8 w-auto"
             />
           </a>
