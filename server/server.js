@@ -130,7 +130,7 @@ app.post('/login', (req, res) => {
  
 // Fetch all registered users
 app.get('/users', (req, res) => {
-  const token = req.headers.authorization; // Get token from request headers
+  const token = req.headers.authorization; 
   const decoded = jwt.verify(token, SECRET_KEY);
   const currentUserId = decoded.id;
  
