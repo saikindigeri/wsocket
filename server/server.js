@@ -14,7 +14,7 @@ const io = new Server(server, {
 });
 
 
-const SECRET_KEY = "secret_key"; // Replace with env variable in production
+const SECRET_KEY = "secret_key"; 
 const PORT = process.env.PORT || 4000;
 // Middleware
 app.use(cors());
@@ -25,7 +25,7 @@ require('dotenv').config();
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,// Replace with env variable in production
+  password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
 });  
  
