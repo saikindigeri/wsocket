@@ -72,8 +72,8 @@ function ChatPage({ selectedFriend }) {
   };
 console.log(messages,userId)
   return (
-    <div className="flex flex-col h-screen max-w-4xl mx-auto bg-gradient-to-br from-blue-50 to-blue-100 shadow-2xl rounded-lg overflow-hidden">
-  <div className="bg-blue-600 p-4 shadow-md">
+    <div className=" flex flex-col h-screen max-w-4xl mx-auto bg-gradient-to-br from-blue-50 to-blue-100 shadow-2xl rounded-lg overflow-hidden">
+  <div className="bg-blue-900 p-4 shadow-md ">
         <h2 className="text-2xl font-bold text-white text-center">
           Chat with {selectedFriend.username}
         </h2>
@@ -86,7 +86,7 @@ console.log(messages,userId)
         key={index}
         className={`flex ${msg.sender_id == userId ? 'justify-end self-start rounded-bl-none' : 'justify-start'}`}
       >
-        <div
+        <div 
         className={`max-w-[70%] break-words rounded-2xl px-4 py-3 shadow-md ${
           msg.sender_id == userId
             ? 'bg-blue-600 text-white rounded-br-none'
