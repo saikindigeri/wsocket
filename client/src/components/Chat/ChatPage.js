@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
 import moment from 'moment';
-// import './ChatPage.css';
+
 
 const socket = io('https://wsocket-5.onrender.com');
 
@@ -15,10 +15,7 @@ function ChatPage({ selectedFriend }) {
   const username = localStorage.getItem('username'); // Logged-in user's username
 
   useEffect(() => {
-    // Join user's room on component load
-
-
-    // Fetch chat history when selectedFriend changes
+    
     const fetchMessages = async () => {
       try {
         const response = await axios.get(
