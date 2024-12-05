@@ -1,72 +1,4 @@
-/*
-import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
-import axios from 'axios';
-import moment from 'moment'
-import './ChatPage.css';
 
-const socket = io('http://localhost:4000'); // Connect to the backend server
-
-function ChatPage() {
-  const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([]);
-  const [username, setUsername] = useState(localStorage.getItem('username') || 'Guest');
-  const token = localStorage.getItem('token'); // Fetch the token for authentication
-
-  // Fetch old messages when the component mounts
-  useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        const response = await axios.get('http://localhost:4000/messages'); // Fetch old messages from the backend
-        setMessages(response.data); // Set the fetched messages in the state
-      } catch (err) {
-        console.error('Failed to fetch messages:', err);
-      }
-    };
-
-    fetchMessages();
-
-    // Real-time socket message handling
-    socket.on('chat message', (msg) => {
-      setMessages((prevMessages) => [...prevMessages, msg]); // Update the state with the new message
-    });
-
-    return () => {
-      socket.off('chat message'); // Clean up socket listener when the component unmounts
-    };
-  }, []);
-
-  // Handle sending new messages
-  const handleSendMessage = () => {
-    if (message.trim()) {
-      socket.emit('chat message', { token, text: message }); // Emit message to the backend
-      setMessage(''); // Clear the input field
-    }
-  };
-
-  return (
-    <div className="chat-container">
-      <div className="messages">
-        {messages.map((msg, index) => (
-          <div key={index} className={msg.user === username ? 'my-message' : 'other-message'}>
-            <strong>{msg.username}</strong>: {msg.message}
-            <small>{moment(msg.timestamp).format(' h:mm:ss a')}</small>
-          </div>
-        ))}
-      </div>
-      <input
-        type="text"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)} // Update the message state
-        placeholder="Type a message..."
-      />
-      <button onClick={handleSendMessage}>Send</button>
-    </div>
-  );
-}
-
-export default ChatPage;
-*/
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
@@ -108,8 +40,8 @@ function ChatPage({ selectedFriend }) {
     // Listen for incoming messages
     socket.on('chat message', (msg) => {
       if (
-        (msg.senderId === userId && msg.receiverId === selectedFriend.id) ||
-        (msg.senderId === selectedFriend.id && msg.receiverId === userId)
+        (msg.senderId == userId && msg.receiverId == selectedFriend.id) ||
+        (msg.senderId == selectedFriend.id && msg.receiverId ==userId)
       ) {
         setMessages((prev) => [...prev, msg]); // Append new messages to the state
       }
@@ -143,48 +75,60 @@ function ChatPage({ selectedFriend }) {
   };
 console.log(messages,userId)
   return (
-    <div className="chat-container p-4 md:p-8 bg-blue-400 bg-gradient-to-r text-white rounded-lg shadow-lg max-w-3xl mx-auto">
-  <h2 className="text-2xl text-center mb-6 font-mono font-semibold text-black">Chat with {selectedFriend.username}</h2>
+    <div className="flex flex-col h-screen max-w-4xl mx-auto bg-gradient-to-br from-blue-50 to-blue-100 shadow-2xl rounded-lg overflow-hidden">
+  <div className="bg-blue-600 p-4 shadow-md">
+        <h2 className="text-2xl font-bold text-white text-center">
+          Chat with {selectedFriend.username}
+        </h2>
+      </div>
 
-  <div className=" messages space-y-4 overflow-y-auto max-h-80 mb-6 rounded-lg ">
+
+  <div className=" flex-1 overflow-y-auto p-4 space-y-4 ">
     {messages.map((msg, index) => (
       <div
         key={index}
         className={`flex ${msg.sender_id == userId ? 'justify-end self-start rounded-bl-none' : 'justify-start'}`}
       >
         <div
-          className={`p-4 max-w-xs rounded-lg shadow-md m-5  ${
-            msg.sender_id == userId
-              ? 'bg-indigo-800 text-white self-end rounded-br-none '
-              : 'bg-gray-200 text-black self-start rounded-bl-none border-gray-300'
-          }`}
+        className={`max-w-[70%] break-words rounded-2xl px-4 py-3 shadow-md ${
+          msg.sender_id == userId
+            ? 'bg-blue-600 text-white rounded-br-none'
+            : 'bg-white text-gray-900 rounded-bl-none'
+        }`}
+
         >
           
          
-          <p className="text-sm">{msg.text}</p>
-         <small className="text-sm/1 text-white-400">
-          {moment(msg.created_at).format('DD/MM/YYYY h:mm A')}
-          </small>
+          <p className="text-sm mb-1">{msg.text}</p>
+          <p className={`text-xs ${
+                msg.sender_id == userId ? 'text-white' : 'text-gray-500'
+              }`}>
+                {moment(msg.created_at).format('DD/MM/YYYY h:mm A')}
+              </p>
+
         </div>
       </div>
     ))}
   </div>
 
-  <div className="input-container flex p-2 items-center space-x-3">
+  <div className="p-4 bg-white border-t border-gray-200">
+  <div className="flex space-x-2">
+
     <input
       type="text"
       value={message}
       onChange={(e) => setMessage(e.target.value)}
       placeholder="Type a message..."
-      className="w-full p-4 text-center text-black rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
+      className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
     />
     <button
       onClick={handleSendMessage}
-      className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+      className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"
     >
       Send
     </button>
   </div>
+</div>
 </div>
 
   );
