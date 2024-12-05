@@ -57,7 +57,7 @@ export default function LandingPage() {
       <div className="hidden lg:flex lg:flex-1 lg:justify-end">
         <a
           href="/login"
-          className="inline-flex items-center rounded-full bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition-colors"
+          className="inline-flex items-center rounded-xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition-colors"
         >
           Log in
           <svg className="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -141,7 +141,7 @@ export default function LandingPage() {
           </a>
           <a
             href="/under-construction"
-            className="w-full sm:w-auto rounded-full bg-gray-50 px-8 py-3 text-base font-medium text-gray-900 hover:bg-gray-100 transition-colors"
+            className="w-full sm:w-auto rounded-xl bg-gray-50 px-8 py-3 text-base font-medium text-gray-900 hover:bg-gray-100 transition-colors"
           >
             Learn more
           </a>
