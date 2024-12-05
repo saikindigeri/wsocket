@@ -88,6 +88,9 @@ export default function Header() {
           <a href="/under-construction" className="text-gray-700 hover:text-gray-900 hover:scale-105 transition-all font-medium">
             Groups
           </a>
+          <a href="/under-construction" className="text-gray-700 hover:text-gray-900 hover:scale-105 transition-all font-medium">
+            Notifications
+          </a>
         </PopoverGroup>
 
         <div className="hidden lg:flex lg:items-center">
@@ -136,6 +139,12 @@ export default function Header() {
           className="block rounded-lg px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-50"
         >
           Groups
+        </a>
+        <a
+          href="/under-construction"
+          className="block rounded-lg px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-50"
+        >
+          Notifications
         </a>
       </div>
       <div className="border-t border-gray-200 py-6">
