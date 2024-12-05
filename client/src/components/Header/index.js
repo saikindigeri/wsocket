@@ -98,11 +98,58 @@ export default function Header() {
       </nav>
 
       <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
-        <div className="fixed inset-0 z-10 bg-black/20 backdrop-blur-sm" />
-        <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto backdrop-blur-lg bg-white/80 px-6 py-6 sm:max-w-sm">
-          {/* Dialog content remains the same but with updated styling */}
-        </DialogPanel>
-      </Dialog>
+  <div className="fixed inset-0 z-10 bg-black/20 backdrop-blur-sm" />
+  <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto backdrop-blur-lg bg-white/80 px-6 py-6 sm:max-w-sm">
+    <div className="flex items-center justify-between">
+      <a href="#" className="flex items-center space-x-2">
+        <img
+          alt="Your Company"
+          src="https://res.cloudinary.com/dpdejfl2k/image/upload/v1733116676/txjkwonfikizve3ljwe4.png"
+          className="h-8 w-auto"
+        />
+      </a>
+      <button
+        type="button"
+        className="rounded-md p-2.5 text-gray-700"
+        onClick={() => setMobileMenuOpen(false)}
+      >
+        <span className="sr-only">Close menu</span>
+        <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+      </button>
+    </div>
+    <div className="mt-6 flow-root">
+      <div className="space-y-2 py-6">
+        <a
+          href="/friends"
+          className="block rounded-lg px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-50"
+        >
+          Requests
+        </a>
+        <a
+          href="/requests"
+          className="block rounded-lg px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-50"
+        >
+          Users
+        </a>
+        <a
+          href="/under-construction"
+          className="block rounded-lg px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-50"
+        >
+          Groups
+        </a>
+      </div>
+      <div className="border-t border-gray-200 py-6">
+        <button
+          onClick={handleLogout}
+          className="block rounded-lg px-3 py-2.5 text-base font-medium text-gray-900 hover:bg-gray-50"
+        >
+          Log out
+        </button>
+      </div>
+    </div>
+  </DialogPanel>
+</Dialog>
+
     </header>
   )
 }
