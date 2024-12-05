@@ -324,7 +324,6 @@ io.on('connection', (socket) => {
     );
   });
 
-  // Handle user disconnection
  
 });
 
